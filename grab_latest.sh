@@ -86,7 +86,8 @@ fi
 echo "   New x86_64 SHA256: $NEW_SHA256_X86"
 echo "   New aarch64 SHA256: $NEW_SHA256_ARM"
 
-$SED_INPLACE -E "s/sha256: [a-f0-9]+ # x86_64-sha256/sha256: $NEW_SHA256_X86 # x86_64-sha256/" "$MANIFEST_FILE"
-$SED_INPLACE -E "s/sha256: [a-f0-9]+ # aarch64-sha256/sha256: $NEW_SHA256_ARM # aarch64-sha256/" "$MANIFEST_FILE"
+# This finds the URL line for each architecture, moves to the next line (n), and replaces the hash.
+$SED_INPLACE -E "/x86_64_linux\.tar\.xz/{n;s/sha256: [a-f0-9]+/sha256: $NEW_SHA256_X86/;}" "$MANIFEST_FILE"
+$SED_INPLACE -E "/arm64_linux\.tar\.xz/{n;s/sha256: [a-f0-9]+/sha256: $NEW_SHA256_ARM/;}" "$MANIFEST_FILE"
 
 echo "   Manifest updated successfully."
