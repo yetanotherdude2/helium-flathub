@@ -11,10 +11,10 @@ It wraps the official prebuilt binaries from the [Helium Linux project](https://
 The easiest way to install Helium is using the standalone bundle. This bypasses the need for manual repositories and works on any system with Flatpak installed.
 
 1.  **Download** the latest `.flatpak` bundle from the [**Releases Page**](https://github.com/ShyVortex/helium-flatpak/releases).
-2.  **Install** it via the command line:
+2.  **Install** it via the command line, in the directory where you downloaded the file:
 
     ```bash
-    flatpak install helium-[VERSION]-[ARCH].flatpak
+    flatpak install ./helium-[VERSION]-[ARCH].flatpak
     ```
 
     *Note: on some distributions, you can simply double-click the downloaded file to install it via your Software Center.*
