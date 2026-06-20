@@ -22,7 +22,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Run update script
-        run: bash ./grab_latest.sh
+        run: bash .github/workflows/grab_latest.sh
         
       - name: Check and Commit
         id: check
@@ -81,36 +81,3 @@ jobs:
         with:
           name: flatpak-${{ matrix.file_arch }}
           path: "*.flatpak"
-
-  # 3. Create the Release
-  release:
-    needs: [update-manifest, build-flatpak]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: main
-
-      - name: Download Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-          merge-multiple: true
-
-      - name: Create Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          VERSION=$(grep -m1 'version:' version.txt | awk '{print $2}')
-          IS_PRERELEASE=$(grep -m1 'prerelease:' version.txt | awk '{print $2}')
-          FLAGS=""
-          if [[ "$IS_PRERELEASE" == "true" ]]; then FLAGS="--prerelease"; fi
-          
-          # Upload all downloaded flatpak artifacts
-          gh release create "$VERSION" \
-            artifacts/*.flatpak \
-            --target main \
-            --title "$VERSION" \
-            --notes "Automated update to Helium version $VERSION" \
-            --generate-notes \
-            $FLAGS
